@@ -9,7 +9,7 @@ public class Node {
 	
 	//used to minimize network calls when getting network output
 	private boolean alreadyCalled;
-	private double value;
+	protected double value;
 	
 	//choices for activation function
 	private int sigmoid = 1;
@@ -24,6 +24,7 @@ public class Node {
 	//Creates a new node
 	public Node()
 	{
+		value = 0;
 		inputNodes = new ArrayList<Node>(0);
 		outputNodes = new ArrayList<Node>(0);
 		alreadyCalled = false;
@@ -121,6 +122,12 @@ public class Node {
 	{
 		alreadyCalled = false;
 		value = 0;
+	}
+	
+	public void setValue(double x)
+	{
+		value = x;
+		alreadyCalled = true;
 	}
 	
 	
