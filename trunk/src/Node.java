@@ -68,7 +68,8 @@ public class Node {
 		{
 			weightedSum += inputWeights[i]*inputNodes.get(i).getOutput();
 		}
-		return activationFunction(weightedSum);
+		value = activationFunction(weightedSum);
+		return value;
 	}
 
 	private double activationFunction(double x)
@@ -79,7 +80,7 @@ public class Node {
 		}
 		if(choice==tanh)
 		{
-			return 1.0/(1.0+Math.tanh(x));
+			return Math.tanh(x);
 		}
 		
 		//failure mode
