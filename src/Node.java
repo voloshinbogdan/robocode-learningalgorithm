@@ -2,13 +2,11 @@ import java.util.*;
 
 public class Node {
 	
-	private ArrayList<Node> inputNodes;
-	private ArrayList<Node> outputNodes;
-	private double[] inputWeights;
-	private double[] outputWeights;
+	protected ArrayList<Node> inputNodes;
+	protected double[] inputWeights;
 	
 	//used to minimize network calls when getting network output
-	private boolean alreadyCalled;
+	protected boolean alreadyCalled;
 	protected double value;
 	
 	//choices for activation function
@@ -26,39 +24,29 @@ public class Node {
 	{
 		value = 0;
 		inputNodes = new ArrayList<Node>(0);
-		outputNodes = new ArrayList<Node>(0);
 		alreadyCalled = false;
 		generator = new Random();
 	}
 	
 	//Constructor that knows the inputNodes and outputNodes
-	public Node(ArrayList<Node> inNodes, ArrayList<Node> outNodes)
+	public Node(ArrayList<Node> inNodes)
 	{
 		this();
 	    //point the lists in the right direction
 		for(int i=0; i<inNodes.size(); i++)
 			inputNodes.add(inNodes.get(i));
-		for(int i=0; i<outNodes.size(); i++)
-			outputNodes.add(outNodes.get(i));
-		
+
 		//initialize weights
 		inputWeights = new double[inNodes.size()];
-		outputWeights = new double[outNodes.size()];
 		
-		//I know it's redundant, we lose no proc time though, it's only at the network startup
-		setWeights(inputWeights);
-		setWeights(outputWeights);
 	}
 	
-	public Node(ArrayList<Node> inNodes, double[] inWeights, 
-			ArrayList<Node> outNodes, double[] outWeights)
+	public Node(ArrayList<Node> inNodes, double[] inWeights)
 	{
-		this(inNodes, outNodes);
+		this(inNodes);
 		//assign the proper weights
 		for(int i=0; i<inNodes.size(); i++)
 			inputWeights[i] = inWeights[i];
-		for(int i=0; i<outNodes.size(); i++)
-			outputWeights[i] = outWeights[i];
 	}
 	
 	
@@ -95,6 +83,13 @@ public class Node {
 		return -1;
 	}
 	
+	public void setInputWeights()
+	{
+		inputWeights = new double[inputNodes.size()];
+		setWeights(inputWeights);
+		return;
+	}
+	
 	public void setNumInputs(int num)
 	{
 		inputWeights = new double[num];
@@ -102,12 +97,7 @@ public class Node {
 		return;
 	}
 	
-	public void setNumOutputs(int num)
-	{
-		outputWeights = new double[num];
-		setWeights(outputWeights);
-		return;
-	}
+
 	
 	//we can set this to scale based on the act. function later
 	//right now this will do
@@ -128,6 +118,19 @@ public class Node {
 	{
 		value = x;
 		alreadyCalled = true;
+	}
+	
+	public double getWeight(int node)
+	{
+		return inputWeights[node];
+	}
+	
+	public boolean setWeight(int node, double weight)
+	{
+		if(node>(inputNodes.size()-1))
+			return false;
+		inputWeights[node] = weight;
+		return true;
 	}
 	
 	
