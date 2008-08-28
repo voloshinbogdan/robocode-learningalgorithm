@@ -133,6 +133,16 @@ public class Node {
 		return true;
 	}
 	
+	public void useSigmoid()
+	{
+		choice = sigmoid;
+	}
+	
+	public void useTanh()
+	{
+		choice  = tanh;
+	}
+	
 	
 	
 }
