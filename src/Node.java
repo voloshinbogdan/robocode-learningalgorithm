@@ -17,6 +17,9 @@ public class Node {
 	
 	//what our choice is
 	private int choice = sigmoid;
+	
+	//random number generator for initializing weights
+	private Random generator;
 
 	//Creates a new node
 	public Node()
@@ -24,6 +27,7 @@ public class Node {
 		inputNodes = new ArrayList<Node>(0);
 		outputNodes = new ArrayList<Node>(0);
 		alreadyCalled = false;
+		generator = new Random();
 	}
 	
 	//Constructor that knows the inputNodes and outputNodes
@@ -36,16 +40,19 @@ public class Node {
 		for(int i=0; i<outNodes.size(); i++)
 			outputNodes.add(outNodes.get(i));
 		
-		//Need a function here to assign random weights, I say we draw from a gaussian at 0
-		//With deviation 1 to allow a weight to be positive or negative
+		//initialize weights
+		inputWeights = new double[inNodes.size()];
+		outputWeights = new double[outNodes.size()];
+		
+		//I know it's redundant, we lose no proc time though, it's only at the network startup
+		setWeights(inputWeights);
+		setWeights(outputWeights);
 	}
 	
 	public Node(ArrayList<Node> inNodes, double[] inWeights, 
 			ArrayList<Node> outNodes, double[] outWeights)
 	{
 		this(inNodes, outNodes);
-		inputWeights = new double[inNodes.size()];
-		outputWeights = new double[outNodes.size()];
 		//assign the proper weights
 		for(int i=0; i<inNodes.size(); i++)
 			inputWeights[i] = inWeights[i];
@@ -85,6 +92,35 @@ public class Node {
 		
 		//failure mode
 		return -1;
+	}
+	
+	public void setNumInputs(int num)
+	{
+		inputWeights = new double[num];
+		setWeights(inputWeights);
+		return;
+	}
+	
+	public void setNumOutputs(int num)
+	{
+		outputWeights = new double[num];
+		setWeights(outputWeights);
+		return;
+	}
+	
+	//we can set this to scale based on the act. function later
+	//right now this will do
+	private void setWeights(double weights[])
+	{
+		for(int i=0; i<weights.length; i++)
+			weights[i] = generator.nextGaussian();
+		return;
+	}
+	
+	public void reset()
+	{
+		alreadyCalled = false;
+		value = 0;
 	}
 	
 	
